@@ -8,6 +8,8 @@ from keras.models import load_model
 import pandas as pd
 from tensorflow.python.keras.preprocessing import sequence
 import pickle
+import os
+
 
 def url_detection(url):
     url_test = [url]
@@ -16,7 +18,8 @@ def url_detection(url):
     maxlen = ''
 
     try:
-        with open("models/kos.txt", "rb") as f:
+        # print("\nThe code is running from here\t\t", os.getcwd())
+        with open("urlDetector/models/new/Run_2021-05-11_11-36_kos.txt", "rb") as f:
             set_of_values = pickle.load(f)
         valid_chars = set_of_values[0]
         max_features = set_of_values[1]
@@ -26,6 +29,7 @@ def url_detection(url):
         print('Error reading the values file')
         print(type(e1))
         print(e1.args)
+        return -1
     
     
     if(valid_chars == '' or max_features == '' or maxlen == ''):
@@ -38,7 +42,7 @@ def url_detection(url):
 
     model_loaded_from_file = ''
     try:
-        model_loaded_from_file = load_model("models/Run_2021-05-09_23-45_ml_model1.h5") 
+        model_loaded_from_file = load_model("urlDetector/models/new/Run_2021-05-11_11-36_ml_model1.h5") 
     except Exception as e:
         print("Model loading failed")
         print(type(e))
@@ -56,6 +60,7 @@ def index(request):
     result = ''
     
     req_body = json.loads(request.body.decode('utf-8'))
+    print(request.body)
     print("Printing request body", req_body['url'], request.body);
     url = req_body['url'].lower()
 
